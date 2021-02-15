@@ -14,6 +14,7 @@ R__LOAD_LIBRARY(libembedding)
 R__LOAD_LIBRARY(libevt_filter)
 R__LOAD_LIBRARY(libktracker)
 R__LOAD_LIBRARY(libSQPrimaryGen)
+R__LOAD_LIBRARY(libana_trkqa)
 using namespace std;
 
 int Fun4Sim(const int nevent = 10)
@@ -76,8 +77,8 @@ int Fun4Sim(const int nevent = 10)
   if(gen_pythia8) {    
     PHPythia8 *pythia8 = new PHPythia8();
     //pythia8->Verbosity(99);
-//    pythia8->set_config_file("phpythia8_DY.cfg");
-    pythia8->set_config_file("phpythia8_Jpsi.cfg");
+    pythia8->set_config_file("phpythia8_DY.cfg");
+   // pythia8->set_config_file("phpythia8_Jpsi.cfg");
     pythia8->set_vertex_distribution_mean(0, 0, target_coil_pos_z, 0);
     pythia8->set_embedding_id(1);
     se->registerSubsystem(pythia8);
@@ -303,6 +304,11 @@ int Fun4Sim(const int nevent = 10)
   //// Trim minor data nodes (to reduce the DST file size)
   //se->registerSubsystem(new SimDstTrimmer());
 
+ //Analysis module for track QA
+  AnaTrkQA* trackQA = new AnaTrkQA();
+  trackQA->set_out_name("trackQA.root");
+  se->registerSubsystem(trackQA);  
+
   // input - we need a dummy to drive the event loop
   if(read_hepmc) {
     Fun4AllHepMCInputManager *in = new Fun4AllHepMCInputManager("HEPMCIN");
@@ -320,8 +326,8 @@ int Fun4Sim(const int nevent = 10)
   ///////////////////////////////////////////
 
   // DST output manager
-  Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT", "DST.root");
-  se->registerOutputManager(out);
+  //Fun4AllDstOutputManager *out = new Fun4AllDstOutputManager("DSTOUT", "DST.root");
+  //se->registerOutputManager(out);
 
   //if(gen_pythia8 && !read_hepmc) {
   //  Fun4AllHepMCOutputManager *out = new Fun4AllHepMCOutputManager("HEPMCOUT", "hepmcout.txt");

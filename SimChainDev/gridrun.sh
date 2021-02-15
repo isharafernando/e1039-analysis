@@ -36,6 +36,10 @@ echo "SETUP = $FN_SETUP"
 source $FN_SETUP
 echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
+export LD_LIBRARY_PATH=/seaquest/users/ishara/e1039-analysis/AnaTrkQA/inst/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=.:/$LD_LIBRARY_PATH
+
+
 time root -b -q Fun4Sim.C\($nevents\)
 RET=$?
 if [ $RET -ne 0 ] ; then
